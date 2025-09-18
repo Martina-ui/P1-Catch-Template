@@ -90,6 +90,11 @@ void AVLTree::check_commands(string commands) {
 
 void AVLTree::insert(string name, string ufid) { //this was taken from project 1 video walkthrough
     this->root = insertHelper(this->root, name, ufid);
+    if (this->root != nullptr) {
+        cout << "successful" << endl;
+    } else {
+        cout << "unsuccessful" << endl;
+    }
 }
 
 Node* AVLTree::insertHelper(Node* node, string name, string ufid) { //this was taken from class slides on Balanced BSTs slide on AVL tree: C++ insert
@@ -153,6 +158,10 @@ void AVLTree::remove(Node* node, string ufid) {
 // if (id < root->id) root->left = remove(root->left, id);
 // Three scenarios (no children/one child/two children) to handle removing the node
 // Make sure to return the correct node (or null) at the end to reconnect subtrees at the ancestor level;
+    if (node == nullptr) {
+        cout << "unsuccessful" << endl;
+        return;
+    }
     if (node->ufid == ufid) {
         node = nullptr;
     }
@@ -161,6 +170,7 @@ void AVLTree::remove(Node* node, string ufid) {
     } else {
         remove(node->right, ufid);
     }
+    cout << "successful" << endl;
 }
 
 void AVLTree::search_id(string ufid) {

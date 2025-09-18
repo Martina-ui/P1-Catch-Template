@@ -20,7 +20,7 @@ TEST_CASE("Test 1: Commands Testing", "[avl][command_error]") {
 	REQUIRE_THROWS(tree.check_commands("")); 
     REQUIRE_THROWS(tree.check_commands("insert"));
     REQUIRE_THROWS(tree.check_commands("insert A11y 45679999"));
-    REQUIRE_THROWS(tree.check_commands("insert 'ally' 1234567")); 
+    REQUIRE_THROWS(tree.check_commands("John insert 1234567")); 
     REQUIRE_THROWS(tree.check_commands("insert 12345678 John")); 
 }
 
