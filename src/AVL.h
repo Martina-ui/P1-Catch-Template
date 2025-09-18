@@ -3,6 +3,7 @@
 #include <vector>
 using namespace std;
 
+//for syntax for lines 7-27 i got from project 1 video walkthrough
 struct Node {
     string name;
     string ufid;
@@ -27,11 +28,9 @@ private:
 
 public:
     Node* get_root() { return root; }
-    int get_height(Node* node);
-    int get_balance(Node* node);
     void check_commands(string commands);
     void insert(string name, string ufid);
-    void remove(string ufid);
+    void remove(Node* node, string ufid);
     void search_id(string ufid);
     void search_name(string name);
     void print_inorder(Node* node);
@@ -39,5 +38,8 @@ public:
     void print_postorder(Node* node);
     void print_level_count();
     void remove_inorder(int n);
+    void inorder_ufid_vector(Node* node, vector<int> inorder_vec);
+    int get_height(Node* node);
+    int get_balance(Node* node);
     ~AVLTree(); //use postorder to delete each node
 };

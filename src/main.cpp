@@ -4,6 +4,7 @@
 using namespace std;
 
 int main(){
+	//got syntax from project 1 ppt slide on code parsing
 	AVLTree tree;
 	string numCommands;
 	getline(cin, numCommands);

@@ -7,7 +7,8 @@
 
 // uncomment and replace the following with your own headers
 #include <algorithm>
-
+#include <vector>
+#include <string>
 using namespace std;
 
 // you must write 5 unique, meaningful tests for credit on the testing portion of this project!
@@ -19,7 +20,7 @@ TEST_CASE("Test 1: Commands Testing", "[avl][command_error]") {
 	REQUIRE_THROWS(tree.check_commands("")); 
     REQUIRE_THROWS(tree.check_commands("insert"));
     REQUIRE_THROWS(tree.check_commands("insert A11y 45679999"));
-    REQUIRE_THROWS(tree.check_commands("John insert 1234567")); 
+    REQUIRE_THROWS(tree.check_commands("insert 'ally' 1234567")); 
     REQUIRE_THROWS(tree.check_commands("insert 12345678 John")); 
 }
 
@@ -51,24 +52,27 @@ TEST_CASE("Test 2: Insert Testing", "[avl][rotations]"){
     REQUIRE(root->right->right->left->ufid == "00000055");
 }
 
-// TEST_CASE("Test 3: Insert 100 Test", "[avl][insert]"){
-//     AVLTree inputTree;
-//     vector<int> expectedOutput, actualOutput;
+TEST_CASE("Test 3: Insert 100/remove 10 Test", "[avl][insert]"){
+    AVLTree inputTree;
+    vector<int> expectedOutput, actualOutput;
+    string test_name = "Test User";
 
-//     for(int i = 0; i < 100000; i++)
-//     {
-//         int randomInput = rand();
-//         if (count(expectedOutput.begin(), expectedOutput.end(), randomInput) == 0)
-//         {
-//             expectedOutput.push_back(randomInput);
-//             inputTree.insert(randomInput);
-//         }
-//     }
+    for(int i = 0; i < 100; i++) {
+        int randomInput = rand();
+        if (count(expectedOutput.begin(), expectedOutput.end(), randomInput) == 0) {
+            expectedOutput.push_back(randomInput);
+            inputTree.insert(test_name, to_string(randomInput));
+        }
+    }
 
-//     actualOutput = inputTree.print_inorder();
-//     REQUIRE(expectedOutput.size() == actualOutput.size());
-//     REQUIRE_FALSE(expectedOutput == actualOutput);    //This assertion can be wrong. Don't use
-//     sort(expectedOutput.begin(), expectedOutput.end());
-//     REQUIRE(expectedOutput == actualOutput);
-
-// }
+    for (int i=0; i<10; i++) {
+        int removed_node = expectedOutput.back();
+        expectedOutput.pop_back();
+        inputTree.remove(inputTree.get_root(), to_string(removed_node));
+    }
+    
+    inputTree.inorder_ufid_vector(inputTree.get_root(), actualOutput);
+    REQUIRE(expectedOutput.size() == actualOutput.size());
+    sort(expectedOutput.begin(), expectedOutput.end());
+    REQUIRE(expectedOutput == actualOutput);
+}
