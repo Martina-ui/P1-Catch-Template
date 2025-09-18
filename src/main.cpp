@@ -11,18 +11,5 @@ int main(){
 	while (getline(cin, numCommands)) {
 		tree.check_commands(numCommands);
 	}
-
-	// getline(cin, numCommands);
-	// istringstream in(numCommands);
-
-	// string command;
-	// in >> command;
-
-	// string next;
-	// getline(in, next, '"');
-	// while(getline(in, next, '"')){
-	// 	tree.check_commands(next);
-	// 	getline(in, next, '"');
-	// }
 	return 0;
 }
