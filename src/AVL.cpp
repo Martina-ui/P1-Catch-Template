@@ -47,35 +47,35 @@ void AVLTree::check_commands(string commands) {
         }
         string name = commandList[1];
         search_name(name);
-    } else if (cmd == "print_inorder") {
+    } else if (cmd == "printInorder") {
         if (size != 1) {
             throw invalid_argument("Error: Invalid number of arguments for print_inorder");
         }
-        print_inorder();
-    } else if (cmd == "print_preorder") {
+        print_inorder(this->root);
+    } else if (cmd == "printPreorder") {
         if (size != 1) {
             throw invalid_argument("Error: Invalid number of arguments for print_preorder");
         }
-        print_preorder();
-    } else if (cmd == "print_postorder") {
+        print_preorder(this->root);
+    } else if (cmd == "printPostorder") {
         if (size != 1) {
             throw invalid_argument("Error: Invalid number of arguments for print_postorder");
         }
-        print_postorder();
+        print_postorder(this->root);
     } else if (cmd == "print_level_count") {
         if (size != 1) {
             throw invalid_argument("Error: Invalid number of arguments for print_level_count");
         }
         print_level_count();
-    } else if (cmd == "remove_inorder") {
+    } else if (cmd == "removeInorder") {
         if (size != 2) {
-            throw invalid_argument("Error: Invalid number of arguments for remove_inorder");
+            throw invalid_argument("Error: Invalid number of arguments for removeInorder");
         }
         int n;
         try {
             n = stoi(commandList[1]);
         } catch (const exception& e) {
-            throw invalid_argument("Error: Argument for remove_inorder must be an integer");
+            throw invalid_argument("Error: Argument for removeInorder must be an integer");
         }
         remove_inorder(n);
     } else {
@@ -96,10 +96,48 @@ Node* AVLTree::insertHelper(Node* node, string name, string ufid) {
     } else if (ufid > node->ufid) {
         node->right = insertHelper(node->right, name, ufid);
     } else {
-        throw invalid_argument("Error: Duplicate UFID");
+        return node;
     }
-    // Note: AVL balancing logic should be implemented here
-    return node;        
+    //for syntax under this i used https://www.geeksforgeeks.org/dsa/insertion-in-an-avl-tree/ and the class slides for Balanced BSTs
+    node->height = 1 + max(get_height(node->left), get_height(node->right));
+    int balance = get_balance(node);
+
+    //left left rotation = right rotation
+    if (balance > 1 && ufid < node->left->ufid) {
+        Node* new_root = node->left;
+        node->left = new_root->right;
+        new_root->right = node;
+        return new_root;
+    }
+    //right right rotation = left rotation
+    if (balance < -1 && ufid > node->right->ufid) {
+        Node* new_root = node->right;
+        node->right = new_root->left;
+        new_root->left = node;
+        return new_root;
+    }
+    //left right rotation
+    if (balance > 1 && ufid > node->left->ufid) {
+        Node* new_root = node->left->right;
+        node->left->right = new_root->left;
+        new_root->left = node->left;
+        node->left = new_root->right;
+        new_root->right = node;
+        return new_root;
+    }
+
+    //right left rotation
+    if(balance < -1 && ufid < node->right->ufid) {
+        Node* new_root = node->right->left;
+        node->right->left = new_root->right;
+        new_root->right = node->right;
+        node->right = new_root->left;
+        new_root->left = node;
+        return new_root;
+    }
+    //to here
+
+    return node;
 }
 
 void AVLTree::remove(string ufid) { 
@@ -109,21 +147,42 @@ void AVLTree::remove(string ufid) {
 void AVLTree::search_id(string ufid) {
 
 }
+
 void AVLTree::search_name(string name) {
 
 }
-void AVLTree::print_inorder() {
 
+void AVLTree::print_inorder(Node* node) {
+    if (node == nullptr) {
+        return;
+    }
+    print_inorder(node->left);
+    cout << node->name << " " << node->ufid << endl;
+    print_inorder(node->right);
 }
-void AVLTree::print_preorder() {
 
+void AVLTree::print_preorder(Node* node) {
+    if (node == nullptr) {
+        return;
+    }
+    cout << node->name << " " << node->ufid << endl;
+    print_preorder(node->left);
+    print_preorder(node->right);
 }
-void AVLTree::print_postorder() {
 
+void AVLTree::print_postorder(Node* node) {
+    if (node == nullptr) {
+        return;
+    }
+    print_postorder(node->left);
+    print_postorder(node->right);
+    cout << node->name << " " << node->ufid << endl;
 }
+
 void AVLTree::print_level_count() {
 
 }
+
 void AVLTree::remove_inorder(int n) {
 
 }
@@ -133,4 +192,14 @@ AVLTree::~AVLTree() {
     if (this->root != nullptr) {
         delete(this->root);
     }
+}
+
+int AVLTree::get_height(Node* node) {
+        if (node == nullptr) return 0;
+        return node->height;
+    }
+
+int AVLTree::get_balance(Node* node) {
+    if (node == nullptr) return 0;
+    return get_height(node->left) - get_height(node->right);
 }

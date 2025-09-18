@@ -18,6 +18,5 @@ int main(){
 		tree.check_commands(next);
 		getline(in, next, '"');
 	}
-
 	return 0;
 }
