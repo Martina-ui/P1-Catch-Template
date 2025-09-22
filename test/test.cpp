@@ -93,7 +93,30 @@ TEST_CASE("Test 4: Level Order Test", "[avl][LevelOrder]") {
     tree.insert("Michael", 00000060);
 	tree.insert("Josh", 00000055);
 
-	//Node* root = tree.get_root();
 	tree.print_level_count();
     REQUIRE(tree.get_height(tree.get_root()) == 4);
+}
+
+TEST_CASE("Test 5: Search Test", "[avl][search]") {
+    AVLTree tree;
+    tree.insert("Martina", 00000030);
+    tree.insert("Alice", 00000020);
+    tree.insert("Bob", 00000010);
+
+    tree.insert("Max", 00000040);
+    tree.insert("Bryan", 00000050);
+
+    tree.insert("Martin", 00000025);
+    tree.insert("Robert", 00000022);
+
+    tree.insert("Michael", 00000060);
+    tree.insert("Josh", 00000055);
+
+    //search id tests
+    tree.search_id(00000025); //should print 25
+    tree.search_id(12345678); //should print unsuccessful
+
+    //search name tests
+    tree.search_name("Robert"); //should print 22
+    tree.search_name("NotAName"); //should print unsuccessful
 }
