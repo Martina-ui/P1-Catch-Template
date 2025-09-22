@@ -113,7 +113,7 @@ TEST_CASE("Test 5: Search Test", "[avl][search]") {
     tree.insert("Josh", 00000055);
 
     //search id tests
-    tree.search_id(00000025); //should print 25
+    tree.search_id(00000025); //should print Martin
     tree.search_id(12345678); //should print unsuccessful
 
     //search name tests

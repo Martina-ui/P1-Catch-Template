@@ -317,7 +317,7 @@ void AVLTree::print_level_count() { //i used the prog 4 quiz as reference for th
     cout << level << endl;
 }
 
-void AVLTree::remove_inorder(int amount) {
+void AVLTree::remove_inorder(int nth_node) {
 // Command format: “removeInorder N”, where N is an integer
 // Functionality: Remove the Nth node from the inorder traversal of the tree (N = 0 for the first node). Print “successful” or “unsuccessful” e.g. if N is outside the desired range.
 // Note: Balancing the tree after removal is not required.
@@ -334,7 +334,15 @@ void AVLTree::remove_inorder(int amount) {
 // Helper function?
 // Watch for memory leaks!
 // Make sure you set pointers to nullptr after deleting them!
-
+    vector<int> inorder_vec;
+    inorder_ufid_vector(this->root, inorder_vec);
+    int size = inorder_vec.size();
+    if (nth_node < 0 || nth_node >= size) {
+        cout << "unsuccessful" << endl;
+        return;
+    }
+    int ufid_to_remove = inorder_vec[nth_node];
+    this->root = remove(this->root, ufid_to_remove);
 }
 
 void AVLTree::inorder_ufid_vector(Node* node, vector<int>& inorder_vec) {
