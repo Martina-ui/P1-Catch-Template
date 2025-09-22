@@ -344,9 +344,13 @@ void AVLTree::inorder_ufid_vector(Node* node, vector<int>& inorder_vec) {
 
 AVLTree::~AVLTree() {
     //use postorder to delete each node
-    if (this->root != nullptr) {
-        delete(this->root);
+    Node* node = this->root;
+    if (node == nullptr) {
+        return;
     }
+    remove(node->left, node->ufid);
+    remove(node->right, node->ufid);
+    delete node;
 }
 
 int AVLTree::get_height(Node* node) {
