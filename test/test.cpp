@@ -77,3 +77,25 @@ TEST_CASE("Test 3: Insert 100/remove 10 Test", "[avl][insert]"){
     sort(expectedOutput.begin(), expectedOutput.end());
     REQUIRE(expectedOutput == actualOutput);
 }
+
+TEST_CASE("Test 4: Level Order Test", "[avl][LevelOrder]") {
+    AVLTree tree;
+    tree.insert("Martina", 00000030);
+	tree.insert("Alice", 00000020);
+	tree.insert("Bob", 00000010);
+
+    tree.insert("Max", 00000040);
+	tree.insert("Bryan", 00000050);
+
+    tree.insert("Martin", 00000025);
+	tree.insert("Robert", 00000022);
+
+    tree.insert("Michael", 00000060);
+	tree.insert("Josh", 00000055);
+
+	//Node* root = tree.get_root();
+	tree.print_level_count();
+    REQUIRE(tree.get_height(tree.get_root()) == 4);
+    //REQUIRE(tree.get_level_count() == 4);
+    // visually inspect output to ensure correctness
+}

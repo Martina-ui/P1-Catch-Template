@@ -275,16 +275,18 @@ void AVLTree::print_level_count() { //i used the prog 4 quiz as reference for th
         int level_size = q.size();
         level++;
         for (int i = 0; i < level_size; i++) {
-            this->root = q.front();
+            Node* current = q.front();
             q.pop();
-            if (this->root->left != nullptr) {
-                q.push(this->root->left);
+            if (current->left != nullptr) {
+                q.push(current->left);
             }
-            if (this->root->right != nullptr) {
-                q.push(this->root->right);
+            if (current->right != nullptr) {
+                q.push(current->right);
             }
         }
+        level++;
     }
+    cout << level << endl;
 }
 
 void AVLTree::remove_inorder(int amount) {
