@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <queue>
 using namespace std;
 
 void AVLTree::check_commands(string commands) {
@@ -264,8 +265,26 @@ void AVLTree::print_postorder(Node* node) {
     cout << node->name << " " << node->ufid << endl;
 }
 
-void AVLTree::print_level_count() {
-
+void AVLTree::print_level_count() { //i used the prog 4 quiz as reference for this function
+    queue<Node*> q;
+    if (this->root != nullptr) {
+        q.push(this->root);
+    }
+    int level = 0;
+    while (!q.empty()) {
+        int level_size = q.size();
+        level++;
+        for (int i = 0; i < level_size; i++) {
+            this->root = q.front();
+            q.pop();
+            if (this->root->left != nullptr) {
+                q.push(this->root->left);
+            }
+            if (this->root->right != nullptr) {
+                q.push(this->root->right);
+            }
+        }
+    }
 }
 
 void AVLTree::remove_inorder(int amount) {
