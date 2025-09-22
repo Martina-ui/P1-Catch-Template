@@ -31,7 +31,7 @@ public:
     void check_commands(string commands);
     void insert(string name, int ufid);
     Node* remove(Node* node, int ufid);
-    void search_id(string ufid);
+    void search_id(int ufid);
     void search_name(string name);
     void print_inorder(Node* node);
     void print_preorder(Node* node);

@@ -96,6 +96,4 @@ TEST_CASE("Test 4: Level Order Test", "[avl][LevelOrder]") {
 	//Node* root = tree.get_root();
 	tree.print_level_count();
     REQUIRE(tree.get_height(tree.get_root()) == 4);
-    //REQUIRE(tree.get_level_count() == 4);
-    // visually inspect output to ensure correctness
 }
