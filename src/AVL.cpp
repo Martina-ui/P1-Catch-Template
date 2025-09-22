@@ -262,8 +262,8 @@ void AVLTree::search_name(string name) {
     cout << "unsuccessful" << endl;
 }
 
-void AVLTree::print_inorder(Node* node) {
-    if (node == nullptr) {
+void AVLTree::print_inorder(Node* node) { 
+    if (node == nullptr) { 
         return;
     }
     print_inorder(node->left);
@@ -290,6 +290,10 @@ void AVLTree::print_postorder(Node* node) {
 }
 
 void AVLTree::print_level_count() { //i used the prog 4 quiz as reference for this function
+    if (this->root == nullptr) {
+        cout << 0 << endl;
+        return;
+    }
     queue<Node*> q;
     if (this->root != nullptr) {
         q.push(this->root);
