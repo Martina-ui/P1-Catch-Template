@@ -53,7 +53,8 @@ void AVLTree::check_commands(string commands) {
         if (size != 2) {
             throw invalid_argument("Error: Invalid number of arguments for remove");
         }
-        //remove(this->get_root(), commandList[1]);
+        int ufid = stoi(commandList[1]);
+        remove(this->get_root(), ufid);
 
     } else if (cmd == "searchId") {
         if (size != 2) {
@@ -97,13 +98,13 @@ void AVLTree::check_commands(string commands) {
         if (size != 2) {
             throw invalid_argument("Error: Invalid number of arguments for removeInorder");
         }
-        int amount;
+        int nth_node;
         try {
-            amount = stoi(commandList[1]);
+            nth_node = stoi(commandList[1]);
         } catch (const exception& e) {
             throw invalid_argument("Error: Argument for removeInorder must be an integer");
         }
-        remove_inorder(amount);
+        remove_inorder(nth_node);
 
     } else {
         throw invalid_argument("Error: Unknown command");
@@ -317,23 +318,7 @@ void AVLTree::print_level_count() { //i used the prog 4 quiz as reference for th
     cout << level << endl;
 }
 
-void AVLTree::remove_inorder(int nth_node) {
-// Command format: “removeInorder N”, where N is an integer
-// Functionality: Remove the Nth node from the inorder traversal of the tree (N = 0 for the first node). Print “successful” or “unsuccessful” e.g. if N is outside the desired range.
-// Note: Balancing the tree after removal is not required.
-
-// Two steps:
-// Find the Nth node (remember N=0 means the first node)
-// Delete it (Remove() would be helpful)
-
-// Finding the Nth node:
-// Check the bounds on N
-// Inorder traversal, but keep track of what node you’re at
-// Hint: Check out slide 19 from discussion 1 ppt on Canvas 
-// Deletion
-// Helper function?
-// Watch for memory leaks!
-// Make sure you set pointers to nullptr after deleting them!
+void AVLTree::remove_inorder(int nth_node) { //slide 19 from discussion 1 ppt on Canvas
     vector<int> inorder_vec;
     inorder_ufid_vector(this->root, inorder_vec);
     int size = inorder_vec.size();
@@ -354,6 +339,16 @@ void AVLTree::inorder_ufid_vector(Node* node, vector<int>& inorder_vec) {
     inorder_ufid_vector(node->right, inorder_vec);
 }
 
+int AVLTree::get_height(Node* node) {
+        if (node == nullptr) return 0;
+        return node->height;
+    }
+
+int AVLTree::get_balance(Node* node) {
+    if (node == nullptr) return 0;
+    return get_height(node->left) - get_height(node->right); //formula from project 1 ppt slides
+}
+
 AVLTree::~AVLTree() {
     //use postorder to delete each node
     Node* node = this->root;
@@ -363,14 +358,4 @@ AVLTree::~AVLTree() {
     remove(node->left, node->ufid);
     remove(node->right, node->ufid);
     delete node;
-}
-
-int AVLTree::get_height(Node* node) {
-        if (node == nullptr) return 0;
-        return node->height;
-    }
-
-int AVLTree::get_balance(Node* node) {
-    if (node == nullptr) return 0;
-    return get_height(node->left) - get_height(node->right); //formula from project 1 ppt slides
 }
