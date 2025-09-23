@@ -6,10 +6,15 @@ using namespace std;
 int main(){
 	//got syntax from project 1 ppt slide on code parsing
 	AVLTree tree;
-	string numCommands;
+	int num_commands;
+	cin >> num_commands;
+	cin.ignore();
 
-	while (getline(cin, numCommands)) {
-		tree.check_commands(numCommands);
+	for (int i=0; i < num_commands; i++) {
+		string command;
+		getline(cin, command);
+		cout << "DEBUG: [" << command << "]" << endl;
+		tree.check_commands(command);
 	}
 	return 0;
 }
