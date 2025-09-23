@@ -27,9 +27,9 @@ void AVLTree::check_commands(string commands) {
     string cmd = commandList[0];
 
     if (cmd == "insert") {
-        // if (size < 3) {
-        //     throw invalid_argument("Error: Invalid number of arguments for insert");
-        // }
+        if (size < 3) {
+            throw invalid_argument("Error: Invalid number of arguments for insert");
+        }
         string name = commandList[1];
         for (int i = 2; i < size - 1; ++i) {
             name += " " + commandList[i];
@@ -281,33 +281,39 @@ void AVLTree::traverse_subtree(Node* node, string name) {
 }
 
 void AVLTree::print_inorder(Node* node) { 
-    if (node == nullptr) { 
-        cout << endl;
+    vector<string> inorder_vec;
+    inorder_names_vector(node, inorder_vec);
+    if (inorder_vec.empty()) {
         return;
     }
-    print_inorder(node->left);
-    cout << node->name << ", ";
-    print_inorder(node->right);
+    for (int i=0; i < inorder_vec.size() - 1; i++) {
+        cout << inorder_vec[i] << ", ";
+    }
+    cout << inorder_vec.back() << endl;
 }
 
 void AVLTree::print_preorder(Node* node) {
-    if (node == nullptr) {
-        cout << endl;
+    vector<string> preorder_vec;
+    preorder_names_vector(node, preorder_vec);
+    if (preorder_vec.empty()) {
         return;
     }
-    cout << node->name << ", ";
-    print_preorder(node->left);
-    print_preorder(node->right);
+    for (int i=0; i < preorder_vec.size() - 1; i++) {
+        cout << preorder_vec[i] << ", ";
+    }
+    cout << preorder_vec.back() << endl;
 }
 
 void AVLTree::print_postorder(Node* node) {
-    if (node == nullptr) {
-        cout << endl;
+    vector<string> postorder_vec;
+    postorder_names_vector(node, postorder_vec);
+    if (postorder_vec.empty()) {
         return;
     }
-    print_postorder(node->left);
-    print_postorder(node->right);
-    cout << node->name << ", ";
+    for (int i=0; i < postorder_vec.size() - 1; i++) {
+        cout << postorder_vec[i] << ", ";
+    }
+    cout << postorder_vec.back() << endl;
 }
 
 void AVLTree::print_level_count() { 
@@ -338,6 +344,33 @@ void AVLTree::inorder_ufid_vector(Node* node, vector<int>& inorder_vec) {
     inorder_ufid_vector(node->left, inorder_vec);
     inorder_vec.push_back(node->ufid);
     inorder_ufid_vector(node->right, inorder_vec);
+}
+
+void AVLTree::inorder_names_vector(Node* node, vector<string>& inorder_vec) {
+    if (node == nullptr) {
+        return;
+    }
+    inorder_names_vector(node->left, inorder_vec);
+    inorder_vec.push_back(node->name);
+    inorder_names_vector(node->right, inorder_vec);
+}
+
+void AVLTree::preorder_names_vector(Node* node, vector<string>& preorder_vec) {
+    if (node == nullptr) {
+        return;
+    }
+    preorder_vec.push_back(node->name);
+    preorder_names_vector(node->left, preorder_vec);
+    preorder_names_vector(node->right, preorder_vec);
+}
+
+void AVLTree::postorder_names_vector(Node* node, vector<string>& postorder_vec) {
+    if (node == nullptr) {
+        return;
+    }
+    postorder_names_vector(node->left, postorder_vec);
+    postorder_names_vector(node->right, postorder_vec);
+    postorder_vec.push_back(node->name);
 }
 
 int AVLTree::get_height(Node* node) {

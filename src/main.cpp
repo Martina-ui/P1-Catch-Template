@@ -13,7 +13,6 @@ int main(){
 	for (int i=0; i < num_commands; i++) {
 		string command;
 		getline(cin, command);
-		cout << "DEBUG: [" << command << "]" << endl;
 		tree.check_commands(command);
 	}
 	return 0;

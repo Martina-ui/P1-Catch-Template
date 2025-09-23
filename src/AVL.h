@@ -41,6 +41,9 @@ public:
     void print_level_count();
     void remove_inorder(int nth_node);
     void inorder_ufid_vector(Node* node, vector<int>& inorder_vec);
+    void inorder_names_vector(Node* node, vector<string>& inorder_vec);
+    void preorder_names_vector(Node* node, vector<string>& preorder_vec);
+    void postorder_names_vector(Node* node, vector<string>& postorder_vec);
     int get_height(Node* node);
     int get_balance(Node* node);
     ~AVLTree(); //use postorder to delete each node
