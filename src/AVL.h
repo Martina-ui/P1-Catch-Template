@@ -30,9 +30,11 @@ public:
     Node*& get_root() { return root; }
     void check_commands(string commands);
     void insert(string name, int ufid);
+    Node* balance_tree(Node* node, int ufid);
     Node* remove(Node* node, int ufid);
     void search_id(int ufid);
     void search_name(string name);
+    void traverse_subtree(Node* node, string name);
     void print_inorder(Node* node);
     void print_preorder(Node* node);
     void print_postorder(Node* node);
@@ -41,6 +43,5 @@ public:
     void inorder_ufid_vector(Node* node, vector<int>& inorder_vec);
     int get_height(Node* node);
     int get_balance(Node* node);
-    Node* balance_tree(Node* node, int ufid);
     ~AVLTree(); //use postorder to delete each node
 };

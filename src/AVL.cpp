@@ -1,3 +1,4 @@
+#include <atomic>
 #include "AVL.h"
 #include <iostream>
 #include <sstream>
@@ -6,6 +7,8 @@
 #include <algorithm>
 #include <queue>
 using namespace std;
+
+static bool remove_flag = false;
 
 void AVLTree::check_commands(string commands) {
     if (commands == "") {
@@ -122,7 +125,7 @@ void AVLTree::insert(string name, int ufid) { //this was taken from project 1 vi
     }
 }
 
-Node* AVLTree::insertHelper(Node* node, string name, int ufid) { //this was taken from class slides on Balanced BSTs slide on AVL tree: C++ insert
+Node* AVLTree::insertHelper(Node* node, string name, int ufid) { //this was taken from class slides on Balanced BSTs slide on AVL tree: insert
     if (node == nullptr) {
         return new Node(name, ufid);
     }
@@ -130,13 +133,12 @@ Node* AVLTree::insertHelper(Node* node, string name, int ufid) { //this was take
         node->left = insertHelper(node->left, name, ufid);
     } else if (ufid > node->ufid) {
         node->right = insertHelper(node->right, name, ufid);
-    } else {
-        return nullptr;
-    }
+    } else if (node->name == name && node->ufid == ufid) {
+        return node;
+    } 
     if (node != nullptr) {
         node = balance_tree(node, ufid);
     }
-
     return node;
 }
 
@@ -163,11 +165,17 @@ Node* AVLTree::balance_tree(Node* node, int ufid) {
         new_root->height = 1 + max(get_height(new_root->left), get_height(new_root->right));
         return new_root;
     }
-    //left right rotation
+    //left right rotation: left child left, then right
     if (balance > 1 && ufid > node->left->ufid) {
-        Node* new_root = node->left->right;
-        node->left->right = new_root->left;
-        new_root->left = node->left;
+        Node* child_left = node->left;
+        Node* left_right = child_left->right;
+        child_left->right = left_right->left;
+        left_right->left = child_left;
+        child_left->height = 1 + max(get_height(child_left->left), get_height(child_left->right));
+        left_right->height = 1 + max(get_height(left_right->left), get_height(left_right->right));
+        node->left = left_right;
+
+        Node* new_root = node->left;
         node->left = new_root->right;
         new_root->right = node;
         node->height = 1 + max(get_height(node->left), get_height(node->right));
@@ -175,11 +183,17 @@ Node* AVLTree::balance_tree(Node* node, int ufid) {
         return new_root;
     }
 
-    //right left rotation
+    //right left rotation: right child right, then left
     if(balance < -1 && ufid < node->right->ufid) {
-        Node* new_root = node->right->left;
-        node->right->left = new_root->right;
-        new_root->right = node->right;
+        Node* child_right = node->right;
+        Node* right_left = child_right->left;
+        child_right->left = right_left->right;
+        right_left->right = child_right;
+        child_right->height = 1 + max(get_height(child_right->left), get_height(child_right->right));
+        right_left->height = 1 + max(get_height(right_left->left), get_height(right_left->right));
+        node->right = right_left;
+
+        Node* new_root = node->right;
         node->right = new_root->left;
         new_root->left = node;
         node->height = 1 + max(get_height(node->left), get_height(node->right));
@@ -191,8 +205,8 @@ Node* AVLTree::balance_tree(Node* node, int ufid) {
 
 Node* AVLTree::remove(Node* node, int ufid) { 
     if (node == nullptr) {
-        cout << "unsuccessful" << endl;
-        return nullptr;
+        if (!remove_flag) cout << "unsuccessful" << endl;
+        return node;
     }
 
     if (ufid < node->ufid) {
@@ -250,17 +264,21 @@ void AVLTree::search_id(int ufid) {
 
 void AVLTree::search_name(string name) {
     Node* current = this->root;
-    while (current != nullptr) {
-        if (name == current->name) {
-            cout << current->ufid << endl;
-            return;
-        } else if (name < current->name) {
-            current = current->left;
-        } else {
-            current = current->right;
-        }
+    if (current == nullptr) {
+        cout << "unsuccessful" << endl;
+        return;
     }
-    cout << "unsuccessful" << endl;
+    traverse_subtree(current->left, name);
+    traverse_subtree(current->right, name);
+}
+
+void AVLTree::traverse_subtree(Node* node, string name) {
+    if (node == nullptr) return;
+    traverse_subtree(node->left, name);
+    if (name == node->name) {
+        cout << node->ufid << endl;
+    }
+    traverse_subtree(node->right, name);
 }
 
 void AVLTree::print_inorder(Node* node) { 
@@ -268,7 +286,7 @@ void AVLTree::print_inorder(Node* node) {
         return;
     }
     print_inorder(node->left);
-    cout << node->name << " " << node->ufid << endl;
+    cout << node->name << ", ";
     print_inorder(node->right);
 }
 
@@ -276,7 +294,7 @@ void AVLTree::print_preorder(Node* node) {
     if (node == nullptr) {
         return;
     }
-    cout << node->name << " " << node->ufid << endl;
+    cout << node->name << ", ";
     print_preorder(node->left);
     print_preorder(node->right);
 }
@@ -287,7 +305,7 @@ void AVLTree::print_postorder(Node* node) {
     }
     print_postorder(node->left);
     print_postorder(node->right);
-    cout << node->name << " " << node->ufid << endl;
+    cout << node->name << ", ";
 }
 
 void AVLTree::print_level_count() { //i used the prog 4 quiz as reference for this function
@@ -295,26 +313,7 @@ void AVLTree::print_level_count() { //i used the prog 4 quiz as reference for th
         cout << 0 << endl;
         return;
     }
-    queue<Node*> q;
-    if (this->root != nullptr) {
-        q.push(this->root);
-    }
-    int level = 0;
-    while (!q.empty()) {
-        int level_size = q.size();
-        level++;
-        for (int i = 0; i < level_size; i++) {
-            Node* current = q.front();
-            q.pop();
-            if (current->left != nullptr) {
-                q.push(current->left);
-            }
-            if (current->right != nullptr) {
-                q.push(current->right);
-            }
-        }
-        level++;
-    }
+    int level = get_height(this->root);
     cout << level << endl;
 }
 
@@ -350,12 +349,13 @@ int AVLTree::get_balance(Node* node) {
 }
 
 AVLTree::~AVLTree() {
-    //use postorder to delete each node
+    remove_flag = true; //copilot suggested i include a flag after "unsuccessful" was being printed during destructor call
     Node* node = this->root;
     if (node == nullptr) {
+        remove_flag = false; 
         return;
     }
     remove(node->left, node->ufid);
     remove(node->right, node->ufid);
-    delete node;
+    remove_flag = false;
 }
