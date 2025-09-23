@@ -25,34 +25,30 @@ TEST_CASE("Test 1: Commands Testing", "[avl][command_error]") {
 
 TEST_CASE("Test 2: Insert Testing", "[avl][rotations]"){
     AVLTree tree;
-    tree.insert("Martina", 11111111);
-	tree.insert("Alice", 22222222);
-	tree.insert("Bob", 33333333);
+    tree.insert("Martina", 11111130);
+    tree.insert("Alice", 11111120);
+    tree.insert("Bob", 11111110);
 
-    tree.insert("Max", 44444444);
-	tree.insert("Bryan", 55555555);
+    tree.insert("Max", 11111140);
+    tree.insert("Bryan", 11111150);
 
-    tree.insert("Martin", 66666666);
-	tree.insert("Robert", 77777777);
+    tree.insert("Martin", 11111125);
+    tree.insert("Robert", 11111122);
 
-    tree.insert("Michael", 88888888);
-	tree.insert("Josh", 99999999);
+    tree.insert("Michael", 11111160);
+    tree.insert("Josh", 11111155);
 
-	Node* root = tree.get_root();
-	tree.print_inorder(root);
-    cout << endl;
-    tree.print_preorder(root);
-    cout << endl;
-    tree.print_postorder(root);
-    REQUIRE(root->ufid == 44444444);
-    REQUIRE(root->left->ufid == 22222222);
-    REQUIRE(root->right->ufid == 66666666);
-    REQUIRE(root->left->left->ufid == 11111111);
-    REQUIRE(root->left->right->ufid == 33333333);
-    REQUIRE(root->right->left->ufid == 55555555);
-    REQUIRE(root->right->right->ufid == 88888888);
-    REQUIRE(root->right->right->left->ufid == 77777777);
-    REQUIRE(root->right->right->right->ufid == 99999999);
+    Node* root = tree.get_root();
+    tree.print_inorder(root);
+    REQUIRE(root->ufid == 11111130);
+    REQUIRE(root->left->ufid == 11111120);
+    REQUIRE(root->right->ufid == 11111150);
+    REQUIRE(root->left->left->ufid == 11111110);
+    REQUIRE(root->left->right->ufid == 11111125);
+    REQUIRE(root->left->right->left->ufid == 11111122);
+    REQUIRE(root->right->left->ufid == 11111140);
+    REQUIRE(root->right->right->ufid == 11111160);
+    REQUIRE(root->right->right->left->ufid == 11111155);
 }
 
 TEST_CASE("Test 3: Insert 100/remove 10 Test", "[avl][insert]"){
