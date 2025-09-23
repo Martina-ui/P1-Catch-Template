@@ -14,6 +14,7 @@ using namespace std;
 // you must write 5 unique, meaningful tests for credit on the testing portion of this project!
 
 // the provided test from the template is below.
+//Test at least five incorrect commands. Ex: insert "A11y" 45679999 [0.5 points]
 TEST_CASE("Test 1: Commands Testing", "[avl][command_error]") {
 	AVLTree tree;   
 	REQUIRE_THROWS(tree.check_commands("")); 
@@ -23,34 +24,31 @@ TEST_CASE("Test 1: Commands Testing", "[avl][command_error]") {
     REQUIRE_THROWS(tree.check_commands("insert 12345678 John")); 
 }
 
+//Test all four rotation cases [1 point]
 TEST_CASE("Test 2: Insert Testing", "[avl][rotations]"){
     AVLTree tree;
-    tree.insert("Martina", 11111130);
-    tree.insert("Alice", 11111120);
-    tree.insert("Bob", 11111110);
+    vector<int> expectedOutput, actualOutput;
+    tree.insert("Martina", 100000040);
+    tree.insert("Alice", 100000030);
+    tree.insert("Bob", 100000020);
 
-    tree.insert("Max", 11111140);
-    tree.insert("Bryan", 11111150);
+    tree.insert("Max", 100000060);
+    tree.insert("Bryan", 100000070);
 
-    tree.insert("Martin", 11111125);
-    tree.insert("Robert", 11111122);
+    tree.insert("Martin", 100000010);
+    tree.insert("Robert", 100000015);
 
-    tree.insert("Michael", 11111160);
-    tree.insert("Josh", 11111155);
+    tree.insert("Michael", 100000080);
+    tree.insert("Josh", 100000075);
 
     Node* root = tree.get_root();
-    tree.print_inorder(root);
-    REQUIRE(root->ufid == 11111130);
-    REQUIRE(root->left->ufid == 11111120);
-    REQUIRE(root->right->ufid == 11111150);
-    REQUIRE(root->left->left->ufid == 11111110);
-    REQUIRE(root->left->right->ufid == 11111125);
-    REQUIRE(root->left->right->left->ufid == 11111122);
-    REQUIRE(root->right->left->ufid == 11111140);
-    REQUIRE(root->right->right->ufid == 11111160);
-    REQUIRE(root->right->right->left->ufid == 11111155);
+    tree.inorder_ufid_vector(root, actualOutput);
+    expectedOutput = {100000010, 100000015, 100000020, 100000030, 100000040, 100000060, 100000070, 100000075, 100000080};
+    REQUIRE(expectedOutput.size() == actualOutput.size());
+    REQUIRE(actualOutput == expectedOutput);
 }
 
+//Insert at least 100 nodes, remove ten random nodes using any delete operation, and check in order. Hint: Use a loop to verify the 100 insertions and the 90 nodes after removal.
 TEST_CASE("Test 3: Insert 100/remove 10 Test", "[avl][insert]"){
     AVLTree inputTree;
     vector<int> expectedOutput, actualOutput;
@@ -75,6 +73,63 @@ TEST_CASE("Test 3: Insert 100/remove 10 Test", "[avl][insert]"){
     REQUIRE(expectedOutput.size() == actualOutput.size());
     sort(expectedOutput.begin(), expectedOutput.end());
     REQUIRE(expectedOutput == actualOutput);
+}
+
+//Test at least three edge cases for various functions. Ex: removing a node that doesn’t exist [0.5 points]
+TEST_CASE("Test 4: Edge Cases Test", "[avl][edge_cases]") {
+    AVLTree tree;
+    tree.insert("Martina", 11111111);
+    tree.insert("Alice", 22222222);
+    tree.insert("Bob", 33333333);
+
+    //remove a node that doesn't exist
+    tree.remove(tree.get_root(), 44444444); //should print unsuccessful
+
+    //remove inorder with an invalid index
+    tree.remove_inorder(-1); //should print unsuccessful
+    tree.remove_inorder(5); //should print unsuccessful since there are only 3 nodes
+
+    //search for a node that doesn't exist
+    tree.search_id(55555555); //should print unsuccessful
+    tree.search_name("Charlie"); //should print unsuccessful
+}
+
+//Test all three deletion cases (no children, one child, two children) [1 point]
+TEST_CASE("Test 5: Deletion Cases Test", "[avl][deletion]") {
+    AVLTree tree;
+    tree.insert("Martina", 11111111);
+    tree.insert("Alice", 22222222);
+    tree.insert("Bob", 33333333);
+
+    tree.insert("Max", 44444444);
+    tree.insert("Bryan", 55555555);
+
+    tree.insert("Martin", 66666666);
+    tree.insert("Robert", 77777777);
+
+    tree.insert("Michael", 88888888);
+    tree.insert("Josh", 99999999);
+
+    //deleting node with no children
+    tree.remove(tree.get_root(), 99999999); //removing Josh
+    vector<string> expectedOutput1 = {"Martina", "Alice", "Bob", "Max", "Bryan", "Martin", "Robert", "Michael"};
+    vector<string> actualOutput1;
+    tree.inorder_names_vector(tree.get_root(), actualOutput1);
+    REQUIRE(expectedOutput1 == actualOutput1);
+
+    //deleting node with one child
+    tree.remove(tree.get_root(), 88888888); //removing Michael
+    vector<string> expectedOutput2 = {"Martina", "Alice", "Bob", "Max", "Bryan", "Martin", "Robert"};
+    vector<string> actualOutput2;
+    tree.inorder_names_vector(tree.get_root(), actualOutput2);
+    REQUIRE(expectedOutput2 == actualOutput2);
+
+    //deleting node with two children
+    tree.remove(tree.get_root(), 22222222); //removing Alice
+    vector<string> expectedOutput3 = {"Martina", "Bob", "Max", "Bryan", "Martin", "Robert"};
+    vector<string> actualOutput3;
+    tree.inorder_names_vector(tree.get_root(), actualOutput3);
+    REQUIRE(expectedOutput3 == actualOutput3);
 }
 
 TEST_CASE("Test 6: Level Order Test", "[avl][LevelOrder]") {
