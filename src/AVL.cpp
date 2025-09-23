@@ -308,7 +308,7 @@ void AVLTree::print_postorder(Node* node) {
     cout << node->name << ", ";
 }
 
-void AVLTree::print_level_count() { //i used the prog 4 quiz as reference for this function
+void AVLTree::print_level_count() { 
     if (this->root == nullptr) {
         cout << 0 << endl;
         return;
