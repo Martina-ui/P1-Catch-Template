@@ -129,7 +129,7 @@ void AVLTree::check_commands(string commands) {
 
 void AVLTree::insert(string name, int ufid) { //117-123 was taken from project 1 video walkthrough
     Node* temp = this->root;
-    this->root = insert_helper(this->root, name, ufid);
+    this->root = insertHelper(this->root, name, ufid);
     if (this->root != nullptr) {
         cout << "successful" << endl;
     } else {
@@ -138,14 +138,14 @@ void AVLTree::insert(string name, int ufid) { //117-123 was taken from project 1
     }
 }
 
-Node* AVLTree::insert_helper(Node* node, string name, int ufid) { //lines 128-142 was taken from class slides on Balanced BSTs slide on AVL tree: insert
+Node* AVLTree::insertHelper(Node* node, string name, int ufid) { //lines 128-142 was taken from class slides on Balanced BSTs slide on AVL tree: insert
     if (node == nullptr) {
         return new Node(name, ufid);
     }
     if (ufid < node->ufid) {
-        node->left = insert_helper(node->left, name, ufid);
+        node->left = insertHelper(node->left, name, ufid);
     } else if (ufid > node->ufid) {
-        node->right = insert_helper(node->right, name, ufid);
+        node->right = insertHelper(node->right, name, ufid);
     } else if (node->name == name && node->ufid == ufid) {
         return node;
     } 
