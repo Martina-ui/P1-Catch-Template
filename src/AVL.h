@@ -24,7 +24,7 @@ class AVLTree {
 
 private:
     Node* root = nullptr;
-    Node* insertHelper(Node* node, string name, int ufid);
+    Node* insert_helper(Node* node, string name, int ufid);
 
 public:
     Node*& get_root() { return root; }
