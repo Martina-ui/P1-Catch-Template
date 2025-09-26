@@ -262,8 +262,8 @@ Node* AVLTree::remove(Node* node, int ufid) {
 
 void AVLTree::search_id(int ufid) {
     Node* current = this->root;
-    if (current->ufid == ufid) {
-        cout << current->name << endl;
+    if (current == nullptr) {
+        cout << "unsuccessful" << endl;
         return;
     }
     while (current != nullptr) {
@@ -281,12 +281,12 @@ void AVLTree::search_id(int ufid) {
 
 void AVLTree::search_name(string name) {
     Node* current = this->root;
-    if (current->name == name) {
-        cout << current->ufid << endl;
-        return;
-    }
     if (current == nullptr) {
         cout << "unsuccessful" << endl;
+        return;
+    }
+    if (current->name == name) {
+        cout << current->ufid << endl;
         return;
     }
     traverse_subtree(current->left, name);
