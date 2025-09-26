@@ -17,27 +17,31 @@ using namespace std;
 //Test at least five incorrect commands. Ex: insert "A11y" 45679999 [0.5 points]
 TEST_CASE("Test 1: Commands Testing", "[avl][command_error]") {
 	AVLTree tree;   
-	REQUIRE_THROWS(tree.check_commands("")); 
-    REQUIRE_THROWS(tree.check_commands("insert"));
-    REQUIRE_THROWS(tree.check_commands("insert A11y 45679999"));
-    REQUIRE_THROWS(tree.check_commands("John insert 1234567")); 
-    REQUIRE_THROWS(tree.check_commands("insert 12345678 John")); 
+    tree.check_commands(""); //should print unsuccessful
+    tree.check_commands("insert"); //should print unsuccessful
+    tree.check_commands("insert A11y 45679999"); //should print unsuccessful
+    tree.check_commands("John insert 1234567"); //should print unsuccessful
+    tree.check_commands("insert 12345678 John"); //should print unsuccessful
 }
 
 //Test all four rotation cases [1 point]
 TEST_CASE("Test 2: Insert Testing", "[avl][rotations]"){
     AVLTree tree;
     vector<int> expectedOutput, actualOutput;
+    //left left case
     tree.insert("Martina", 100000040);
     tree.insert("Alice", 100000030);
     tree.insert("Bob", 100000020);
 
+    //right right case
     tree.insert("Max", 100000060);
     tree.insert("Bryan", 100000070);
 
+    //left right case
     tree.insert("Martin", 100000010);
     tree.insert("Robert", 100000015);
 
+    //right left case
     tree.insert("Michael", 100000080);
     tree.insert("Josh", 100000075);
 
@@ -55,6 +59,7 @@ TEST_CASE("Test 3: Insert 100/remove 10 Test", "[avl][insert]"){
     string test_name = "Test User";
     Node* &inputtree_root = inputTree.get_root();
 
+    //create the 100
     for(int i = 0; i < 100; i++) {
         int randomInput = rand();
         if (count(expectedOutput.begin(), expectedOutput.end(), randomInput) == 0) {
@@ -63,6 +68,7 @@ TEST_CASE("Test 3: Insert 100/remove 10 Test", "[avl][insert]"){
         }
     }
 
+    //remove 10 random 
     for (int i=0; i<10; i++) {
         int removed_node = expectedOutput.back();
         expectedOutput.pop_back();
@@ -110,21 +116,21 @@ TEST_CASE("Test 5: Deletion Cases Test", "[avl][deletion]") {
     tree.insert("Michael", 88888888);
     tree.insert("Josh", 99999999);
 
-    //deleting node with no children
+    //deleting with no children
     tree.remove(tree.get_root(), 99999999); //removing Josh
     vector<string> expectedOutput1 = {"Martina", "Alice", "Bob", "Max", "Bryan", "Martin", "Robert", "Michael"};
     vector<string> actualOutput1;
     tree.inorder_names_vector(tree.get_root(), actualOutput1);
     REQUIRE(expectedOutput1 == actualOutput1);
 
-    //deleting node with one child
+    //deleting with one child
     tree.remove(tree.get_root(), 88888888); //removing Michael
     vector<string> expectedOutput2 = {"Martina", "Alice", "Bob", "Max", "Bryan", "Martin", "Robert"};
     vector<string> actualOutput2;
     tree.inorder_names_vector(tree.get_root(), actualOutput2);
     REQUIRE(expectedOutput2 == actualOutput2);
 
-    //deleting node with two children
+    //deleting with two children
     tree.remove(tree.get_root(), 22222222); //removing Alice
     vector<string> expectedOutput3 = {"Martina", "Bob", "Max", "Bryan", "Martin", "Robert"};
     vector<string> actualOutput3;

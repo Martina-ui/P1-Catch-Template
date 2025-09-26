@@ -12,7 +12,8 @@ static bool remove_flag = false; //the codespace autocomplete suggested i includ
 
 void AVLTree::check_commands(string commands) {
     if (commands == "") {
-        throw invalid_argument("Error: No command provided");
+        cout << "unsuccessful" << endl;
+        return;
     }
 
     istringstream iss(commands);
