@@ -30,11 +30,12 @@ public:
     Node*& get_root() { return root; }
     void check_commands(string commands);
     void insert(string name, int ufid);
+    bool check_duplicate(int ufid);
     Node* balance_tree(Node* node, int ufid);
     Node* remove(Node* node, int ufid);
     void search_id(int ufid);
     void search_name(string name);
-    void traverse_subtree(Node* node, string name);
+    void traverse_subtree(Node* node, string& name, bool& found);
     void print_inorder(Node* node);
     void print_preorder(Node* node);
     void print_postorder(Node* node);

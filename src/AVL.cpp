@@ -128,6 +128,10 @@ void AVLTree::check_commands(string commands) {
 }
 
 void AVLTree::insert(string name, int ufid) { //117-123 was taken from project 1 video walkthrough
+    if (check_duplicate(ufid)) {
+        cout << "unsuccessful" << endl;
+        return;
+    }
     Node* temp = this->root;
     this->root = insertHelper(this->root, name, ufid);
     if (this->root != nullptr) {
@@ -136,6 +140,19 @@ void AVLTree::insert(string name, int ufid) { //117-123 was taken from project 1
         this->root = temp;
         cout << "unsuccessful" << endl;
     }
+}
+ bool AVLTree::check_duplicate(int ufid) {
+    Node* current = this->root;
+    while (current != nullptr) {
+        if (ufid == current->ufid) {
+            return true;
+        } else if (ufid < current->ufid) {
+            current = current->left;
+        } else {
+            current = current->right;
+        }
+    }
+    return false;
 }
 
 Node* AVLTree::insertHelper(Node* node, string name, int ufid) { //lines 128-142 was taken from class slides on Balanced BSTs slide on AVL tree: insert
@@ -280,26 +297,21 @@ void AVLTree::search_id(int ufid) {
 }
 
 void AVLTree::search_name(string name) {
-    Node* current = this->root;
-    if (current == nullptr) {
+    bool found = false;
+    traverse_subtree(this->root, name, found);
+    if (!found) {
         cout << "unsuccessful" << endl;
-        return;
     }
-    if (current->name == name) {
-        cout << current->ufid << endl;
-        return;
-    }
-    traverse_subtree(current->left, name);
-    traverse_subtree(current->right, name);
 }
 
-void AVLTree::traverse_subtree(Node* node, string name) {
+void AVLTree::traverse_subtree(Node* node, string& name, bool& found) {
     if (node == nullptr) return;
-    traverse_subtree(node->left, name);
+    traverse_subtree(node->left, name, found);
     if (name == node->name) {
         cout << node->ufid << endl;
+        found = true;
     }
-    traverse_subtree(node->right, name);
+    traverse_subtree(node->right, name, found);
 }
 
 void AVLTree::print_inorder(Node* node) { 
